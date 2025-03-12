@@ -1,17 +1,19 @@
 dagshub
 ensure
 Flask
+gensim
+joblib
+kaggle
 mlflow
 mlflow_skinny
+nltk
+numpy
 pandas
 python_box
 PyYAML
 PyYAML
 scikit_learn
 setuptools
-sentencepiece
-torch
-tqdm
-transformers
+xgboost
 dvc
 -e .
