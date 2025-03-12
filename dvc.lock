@@ -1,0 +1,99 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/fnd/component/s1_data_ingestion.py
+    deps:
+    - path: src/fnd/component/s1_data_ingestion.py
+      hash: md5
+      md5: c87eb6f42491467fe7b4355a7ad6135b
+      size: 4578
+    outs:
+    - path: artifacts/data_ingestion
+      hash: md5
+      md5: 7b0e2694322891291730aa5798796f6d.dir
+      size: 3162385
+      nfiles: 4
+  data_validation:
+    cmd: python src/fnd/component/s2_data_validation.py
+    deps:
+    - path: artifacts/data_ingestion
+      hash: md5
+      md5: 7b0e2694322891291730aa5798796f6d.dir
+      size: 3162385
+      nfiles: 4
+    - path: src/fnd/component/s2_data_validation.py
+      hash: md5
+      md5: 3fee2ae188f3fdb8ffabc351b72d003b
+      size: 3018
+  data_preprocessing:
+    cmd: python src/fnd/component/s3_data_preprocessing.py
+    deps:
+    - path: artifacts/data_ingestion
+      hash: md5
+      md5: 7b0e2694322891291730aa5798796f6d.dir
+      size: 3162385
+      nfiles: 4
+    - path: src/fnd/component/s3_data_preprocessing.py
+      hash: md5
+      md5: 15dae592950f32f77ee695561162c9d2
+      size: 5967
+    outs:
+    - path: artifacts/data_preprocessing
+      hash: md5
+      md5: 09ffaf37b43f39d2e48790b6ec201f7c.dir
+      size: 109953382
+      nfiles: 158
+  data_transformation:
+    cmd: python src/fnd/component/s4_data_transformation.py
+    deps:
+    - path: artifacts/data_preprocessing
+      hash: md5
+      md5: 09ffaf37b43f39d2e48790b6ec201f7c.dir
+      size: 109953382
+      nfiles: 158
+    - path: src/fnd/component/s4_data_transformation.py
+      hash: md5
+      md5: 451016e0ac93caae90c84b3b36e21461
+      size: 3198
+    outs:
+    - path: artifacts/data_transformation
+      hash: md5
+      md5: ffdc7e8a340d790df54c11108c296895.dir
+      size: 4649340
+      nfiles: 4
+  model_training:
+    cmd: python src/fnd/component/s5_model_training.py
+    deps:
+    - path: artifacts/data_transformation
+      hash: md5
+      md5: ffdc7e8a340d790df54c11108c296895.dir
+      size: 4649340
+      nfiles: 4
+    - path: src/fnd/component/s5_model_training.py
+      hash: md5
+      md5: 645263806e75607364899f2cec7e4b69
+      size: 3492
+    outs:
+    - path: artifacts/model
+      hash: md5
+      md5: bdcc19cef8ceb8a41533eb5b2d115ed0.dir
+      size: 351380
+      nfiles: 2
+  model_evaluation:
+    cmd: python src/fnd/component/s6_model_evaluation.py
+    deps:
+    - path: artifacts/model
+      hash: md5
+      md5: bdcc19cef8ceb8a41533eb5b2d115ed0.dir
+      size: 351380
+      nfiles: 2
+    - path: src/fnd/component/s6_model_evaluation.py
+      hash: md5
+      md5: f9bc13811e30f351ceb92147584354af
+      size: 5080
+    outs:
+    - path: artifacts/evaluation
+      hash: md5
+      md5: 96ed95ae5f6786f4ad259825244d2271.dir
+      size: 1379
+      nfiles: 1

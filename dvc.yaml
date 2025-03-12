@@ -32,7 +32,6 @@ stages:
     cmd: python src/fnd/component/s5_model_training.py
     deps:
       - src/fnd/component/s5_model_training.py
-      - src/fnd/component/model.py
       - artifacts/data_transformation
     outs:
       - artifacts/model
