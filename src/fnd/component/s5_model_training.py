@@ -21,11 +21,7 @@ class ModelTraining:
         )
 
         # Define hyperparameter grid
-        self.param_grid: dict = {
-            "n_estimators": [50, 100, 200],
-            "learning_rate": [0.01, 0.1, 0.2],
-            "max_depth": [3, 5, 7],
-        }
+        self.param_grid: dict = self.config.params
 
     def _load_data(self, X_path: Path, y_path: Path) -> tuple[np.ndarray, np.ndarray]:
         """Load training data from the provided file paths."""

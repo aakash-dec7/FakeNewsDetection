@@ -80,6 +80,7 @@ class ConfigurationManager:
     ### Model Training
     def get_model_training_config(self) -> ModelTrainingConfig:
         training_config = self.config.model_training
+        training_params = self.params.hyperparameters
 
         create_directories(training_config.root_dir)
 
@@ -87,6 +88,7 @@ class ConfigurationManager:
             root_dir=training_config.root_dir,
             train_X_path=training_config.train_X_path,
             train_y_path=training_config.train_y_path,
+            params=training_params
         )
 
     ### Model Evaluation

@@ -36,6 +36,7 @@ class ModelTrainingConfig:
     root_dir: Path
     train_X_path: Path
     train_y_path: Path
+    params: dict
 
 
 @dataclass
