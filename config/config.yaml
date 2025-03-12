@@ -33,10 +33,10 @@ model_evaluation:
   metrics_path: artifacts/evaluation
 
 experiment_tracking:
-  repo_name: Test_FakeNewsDetection
+  repo_name: FakeNewsDetection
   repo_owner: aakash-dec7
   mlflow:
-    uri: https://dagshub.com/aakash-dec7/Test_FakeNewsDetection.mlflow
+    uri: https://dagshub.com/aakash-dec7/FakeNewsDetection.mlflow
 
 prediction:
   model_path: artifacts/model/model.pkl
