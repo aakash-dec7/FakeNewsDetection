@@ -1,0 +1,92 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  continuous-integration:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    outputs:
+      PACKAGE_NAME: ${{ steps.package_info.outputs.PACKAGE_NAME }}
+      PACKAGE_VERSION: ${{ steps.package_info.outputs.PACKAGE_VERSION }}
+      HASH: ${{ steps.package_info.outputs.HASH }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Extract Package Info
+        id: package_info
+        run: |
+          PACKAGE_INFO=$(python -c "from src.seq2seq.utils.utils import get_package_info; import json; print(json.dumps(get_package_info()))")
+          echo "PACKAGE_NAME=$(echo "$PACKAGE_INFO" | jq -r '.[0]')" >> $GITHUB_OUTPUT
+          echo "PACKAGE_VERSION=$(echo "$PACKAGE_INFO" | jq -r '.[1]')" >> $GITHUB_OUTPUT
+          echo "HASH=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Authenticate with AWS ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build & Push Docker Image
+        run: |
+          IMAGE_URI=${{ secrets.ECR_REGISTRY_URI }}/${{ steps.package_info.outputs.PACKAGE_NAME }}:v${{ steps.package_info.outputs.PACKAGE_VERSION }}--${{ steps.package_info.outputs.HASH }}
+          docker build -t $IMAGE_URI .
+          docker push $IMAGE_URI
+
+  continuous-deployment:
+    name: Continuous Deployment
+    runs-on: ubuntu-latest
+    needs: continuous-integration
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Authenticate with AWS ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Load Package Info from CI
+        run: |
+          echo "PACKAGE_NAME=${{ needs.continuous-integration.outputs.PACKAGE_NAME }}" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=${{ needs.continuous-integration.outputs.PACKAGE_VERSION }}" >> $GITHUB_ENV
+          echo "HASH=${{ needs.continuous-integration.outputs.HASH }}" >> $GITHUB_ENV
+
+      - name: Update kubeconfig for AWS EKS
+        run: aws eks update-kubeconfig --region ${{ secrets.AWS_DEFAULT_REGION }} --name ${{ env.PACKAGE_NAME }}
+
+      - name: Deploy to Kubernetes
+        run: |
+          IMAGE_URI=${{ secrets.ECR_REGISTRY_URI }}/${{ env.PACKAGE_NAME }}:v${{ env.PACKAGE_VERSION }}--${{ env.HASH }}
+          sed -i "s|\${IMAGE}|$IMAGE_URI|g" deployment.yaml
+          kubectl apply -f deployment.yaml
+          kubectl rollout status deployment/myapp
