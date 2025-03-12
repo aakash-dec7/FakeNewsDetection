@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fake News Detection</title>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #ffffff;
+            text-align: center;
+            margin: 50px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            background: rgba(13, 26, 38, 0.9);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .container:hover {
+            transform: scale(1.05);
+        }
+
+        textarea,
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            background: #1b3b5f;
+            color: #ffffff;
+            border: 1px solid #4a6fa5;
+        }
+
+        textarea::placeholder {
+            color: #a0aab4;
+        }
+
+        button {
+            cursor: pointer;
+            background: linear-gradient(135deg, #ff512f, #dd2476);
+            color: white;
+            font-weight: 600;
+            border: none;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #e33e2b, #c81a60);
+            transform: translateY(-3px);
+        }
+
+        h2 {
+            color: #f3f3f3;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h3 {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .real {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .fake {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Fake News Detection</h2>
+        <form action="/analyze" method="post">
+            <textarea name="text_input" id="text_input" placeholder="Enter news article text to check authenticity"
+                rows="4" required></textarea>
+            <button type="submit">Analyze</button>
+        </form>
+        {% if prediction %}
+        <h3>This news is: {{ prediction }}</h3>
+        {% endif %}
+
+    </div>
+</body>
+
+</html>
