@@ -1,0 +1,52 @@
+stages:
+  data_ingestion:
+    cmd: python src/seq2seq/component/s1_data_ingestion.py
+    deps:
+      - src/seq2seq/component/s1_data_ingestion.py
+    outs:
+      - artifacts/data_ingestion
+
+  data_validation:
+    cmd: python src/seq2seq/component/s2_data_validation.py
+    deps:
+      - src/seq2seq/component/s2_data_validation.py
+      - artifacts/data_ingestion
+
+  data_preprocessing:
+    cmd: python src/seq2seq/component/s3_data_preprocessing.py
+    deps:
+      - src/seq2seq/component/s3_data_preprocessing.py
+      - artifacts/data_ingestion
+    outs:
+      - artifacts/data_preprocessing
+
+  data_transformation:
+    cmd: python src/seq2seq/component/s4_data_transformation.py
+    deps:
+      - src/seq2seq/component/s4_data_transformation.py
+      - artifacts/data_preprocessing
+    outs:
+      - artifacts/data_transformation
+
+  model:
+    cmd: python src/seq2seq/component/model.py
+    deps:
+      - src/seq2seq/component/model.py
+      - artifacts/data_transformation
+
+  model_training:
+    cmd: python src/seq2seq/component/s5_model_training.py
+    deps:
+      - src/seq2seq/component/s5_model_training.py
+      - src/seq2seq/component/model.py
+      - artifacts/data_transformation
+    outs:
+      - artifacts/model
+
+  model_evaluation:
+    cmd: python src/seq2seq/component/s6_model_evaluation.py
+    deps:
+      - src/seq2seq/component/s6_model_evaluation.py
+      - artifacts/model
+    outs:
+      - artifacts/evaluation
