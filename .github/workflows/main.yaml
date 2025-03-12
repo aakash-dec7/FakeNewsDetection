@@ -35,7 +35,7 @@ jobs:
       - name: Extract Package Info
         id: package_info
         run: |
-          PACKAGE_INFO=$(python -c "from src.seq2seq.utils.utils import get_package_info; import json; print(json.dumps(get_package_info()))")
+          PACKAGE_INFO=$(python -c "from src.fnd.utils.utils import get_package_info; import json; print(json.dumps(get_package_info()))")
           echo "PACKAGE_NAME=$(echo "$PACKAGE_INFO" | jq -r '.[0]')" >> $GITHUB_OUTPUT
           echo "PACKAGE_VERSION=$(echo "$PACKAGE_INFO" | jq -r '.[1]')" >> $GITHUB_OUTPUT
           echo "HASH=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
