@@ -5,20 +5,27 @@ This repository provides an end-to-end pipeline for Fake News Detection using an
 ## Key Features
 
 - **XGBoost Model** for high-performance classification.
+
 - **Data Version Control (DVC)** for managing and tracking data, model training, and evaluation pipelines.
+
 - **Word2Vec Vectorizer** for efficient text embedding and feature extraction.
+
 - **MLflow & DagsHub Integration** for experiment tracking, model registry, and version control.
+
 - **Amazon Elastic Container Registry (ECR)** for storing and managing Docker container images.
+
 - **Amazon Elastic Kubernetes Service (EKS)** for seamless deployment and scalability.
+
 - **CI/CD Implementation** using GitHub Actions for automated testing, model building, and deployment.
 
 ## Prerequisites
 
-Ensure the following dependencies and services are installed and configured before running the project:
+Ensure the following dependencies and services are installed and configured:
 
 - Python 3.10
-- AWS Account & AWS CLI (configured with credentials)
-- Docker Desktop (for local testing and containerization)
+- AWS Account
+- AWS CLI
+- Docker Desktop (for local image testing)
 - DagsHub Account (for experiment tracking)
 - Git & GitHub (for version control)
 
@@ -32,29 +39,29 @@ Ensure the following dependencies and services are installed and configured befo
 
 The dataset consists of two key columns:
 
-- **Statement** - The news statement that needs to be classified.
-- **Label** - The ground truth classification label (e.g., True, False, Partially True, etc.).
+- **Statement**
+- **Label**
 
 ## Model Architecture
 
-The Fake News Detection model consists of the following key components:
+The **Fake News Detection** model consists of the following key components:
 
 1. **Text Preprocessing & Feature Extraction**
-   - Tokenization, stopword removal, and text normalization.
-   - Word2Vec embeddings for feature extraction.
+   - Tokenization, `stopword` removal, and text normalization.
+   - `Word2Vec` embeddings for feature extraction.
 
 2. **Model Selection & Training**
-   - **Base Model**: XGBoost (XGBClassifier) is used for classification.
-   - **Hyperparameter Optimization**: GridSearchCV is employed to identify the optimal hyperparameters.
-   - **Cross-Validation**: StratifiedKFold ensures balanced class distribution during training.
+   - **Base Model**: `XGBoost` (XGBClassifier) is used for classification.
+   - **Hyperparameter Optimization**: `GridSearchCV` is employed to identify the optimal hyperparameters.
+   - **Cross-Validation**: `StratifiedKFold` ensures balanced class distribution during training.
 
 3. **Performance Evaluation & Model Selection**
-   - Evaluation metrics: Accuracy, Precision, Recall, F1-score, and AUC-ROC.
-   - The best-performing model is selected based on cross-validation results.
+   - Evaluation metrics: `Accuracy`, `Precision`, `Recall`, `F1-score`, and `AUC-ROC`.
+   - The **best-performing model** is selected based on `cross-validation` results.
 
 4. **Model Serialization & Deployment**
    - The trained model is saved as `model.pth` for deployment.
-   - CI/CD automates model deployment using Docker and Kubernetes.
+   - **CI/CD** automates model deployment using `Docker` and `Kubernetes`.
 
 ## Installation & Setup
 
@@ -97,7 +104,7 @@ dvc repro
 The trained model will be saved in:
 
 ```sh
-artifacts/model/model.pth
+artifacts/model/model.pkl
 ```
 
 ## Deployment
@@ -171,4 +178,8 @@ Copy the `EXTERNAL-IP` and access the application:
 http://<EXTERNAL-IP>:5000
 ```
 
-The Fake News Detection model is now successfully deployed and accessible online.
+The Fake News Detection application is now successfully deployed and accessible online.
+
+## License
+
+This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for details.
