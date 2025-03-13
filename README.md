@@ -1,6 +1,6 @@
 # Fake News Detection
 
-This repository provides an end-to-end pipeline for Fake News Detection using an XGBoost model, implemented with scikit-learn. The project follows a modular structure, ensuring enhanced readability, maintainability, and scalability.
+This repository contains an end-to-end pipeline for **Fake News Detection** using an `XGBoost` model, implemented with scikit-learn. The project follows a modular structure, ensuring enhanced readability, maintainability, and scalability.
 
 ## Key Features
 
