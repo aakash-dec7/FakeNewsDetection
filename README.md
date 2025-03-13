@@ -37,7 +37,7 @@ Ensure the following dependencies and services are installed and configured:
 
 ### Description
 
-The dataset consists of two key columns:
+The dataset consists of:
 
 - **Statement**
 - **Label**
@@ -86,12 +86,10 @@ dvc init
 
 ## DVC Pipeline Stages
 
-The project follows a structured pipeline with six main stages:
-
 1. **Data Ingestion** - Fetches and stores the raw dataset.
 2. **Data Validation** - Ensures data quality and integrity.
 3. **Data Preprocessing** - Cleans, tokenizes, and prepares text data.
-4. **Feature Engineering** - Transforms text into numerical embeddings using Word2Vec.
+4. **Data Transformation** - Transforms text into numerical embeddings using Word2Vec.
 5. **Model Training** - Trains the model with hyperparameter tuning and cross-validation.
 6. **Model Evaluation** - Assesses model performance and selects the best version.
 
@@ -125,7 +123,7 @@ setup(
 
 ### Create an Amazon EKS Cluster
 
-Run the following command to create an Amazon EKS cluster:
+Execute the following command to create an Amazon EKS cluster:
 
 ```sh
 eksctl create cluster --name <cluster-name> \
@@ -140,7 +138,7 @@ eksctl create cluster --name <cluster-name> \
 
 ### Push Code to GitHub & Configure CI/CD
 
-Before pushing the code, configure GitHub Actions secrets under **Settings > Secrets and Variables > Actions**:
+Before pushing the code, ensure that the necessary GitHub Actions secrets are added under **Settings > Secrets and Variables > Actions**:
 
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
@@ -157,7 +155,7 @@ git push origin main
 
 ### CI/CD Automation
 
-GitHub Actions will handle the CI/CD process, ensuring that the model is built, tested, and deployed automatically to the EKS cluster.
+GitHub Actions will automate the CI/CD process, ensuring that the model is built, tested, and deployed to **Amazon EKS**.
 
 ## Accessing the Deployed Application
 
